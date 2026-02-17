@@ -1,4 +1,4 @@
-package org.achraf.ws.apigateway.security;
+package org.achraf.ws.authservice.security;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,7 +22,7 @@ public class KeycloakRoleConverter
 
         }
         Collection<GrantedAuthority> returnValue = ((List<String>) realmAccess.get("roles"))
-                .stream().map(roleName -> "ROLE_" + roleName)
+                .stream().map(roleName -> "ROLE_" + roleName.toUpperCase())
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
         return returnValue;
