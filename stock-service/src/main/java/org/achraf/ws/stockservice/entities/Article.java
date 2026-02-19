@@ -18,7 +18,7 @@ public class Article {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idArticle;
+    private Long idArticle;
 
     @Column(nullable = false, unique = true, length = 100)
     private String codeArticle;
@@ -34,9 +34,6 @@ public class Article {
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal unitPrice;
-
-    @Column(nullable = false)
-    private Integer familyId;
 
     @ManyToOne
     @JoinColumn(name = "family_id", nullable = false)

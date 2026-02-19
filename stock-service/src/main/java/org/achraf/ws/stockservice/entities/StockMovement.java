@@ -1,15 +1,23 @@
 package org.achraf.ws.stockservice.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.achraf.ws.stockservice.StockMovementType;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class StockMovement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StockMovementType type;
@@ -19,10 +27,6 @@ public class StockMovement {
 
     @Column(nullable = false)
     private LocalDateTime movementDate;
-
-    // If you want simple foreign keys (no relationship)
-    @Column(nullable = false)
-    private Integer articleId;
 
     @Column(nullable = false)
     private Integer userId;

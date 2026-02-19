@@ -18,7 +18,7 @@ public class ArticleFamily {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idFamille;
+    private Long idFamille;
 
     @Column(nullable = false, unique = true, length = 100)
     private String codeFamille;
