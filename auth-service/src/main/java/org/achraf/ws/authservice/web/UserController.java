@@ -48,7 +48,26 @@ public class UserController {
 
         return ResponseEntity.ok(userDTO);
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
 
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(
+                        "User not found with id: " + id
+                ));
+
+        UserDTO dto = new UserDTO(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getRoles()
+                        .stream()
+                        .map(Role::getName)
+                        .collect(Collectors.toSet())
+        );
+
+        return ResponseEntity.ok(dto);
+    }
 
     // Ajouter une activité à un utilisateur
     @PostMapping("/{userId}/activities")

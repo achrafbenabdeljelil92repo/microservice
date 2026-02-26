@@ -29,7 +29,7 @@ public class StockMovement {
     private LocalDateTime movementDate;
 
     @Column(nullable = false)
-    private Integer userId;
+    private Long userId;
 
     @ManyToOne
     @JoinColumn(name = "article_id", nullable = false)
