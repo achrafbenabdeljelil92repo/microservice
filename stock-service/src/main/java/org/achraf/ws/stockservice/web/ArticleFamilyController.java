@@ -1,8 +1,11 @@
 package org.achraf.ws.stockservice.web;
 
+import org.achraf.ws.stockservice.config.kafka.kafkaConfig.kafkaEvents.StockCreatedEvent;
 import org.achraf.ws.stockservice.entities.ArticleFamily;
+import org.achraf.ws.stockservice.enums.StockActivity;
 import org.achraf.ws.stockservice.repository.ArticleFamilyRepository;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,11 +13,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/families")
 public class ArticleFamilyController {
-
+    KafkaTemplate<String, StockCreatedEvent> kafkaTemplate;
     private final ArticleFamilyRepository familyRepository;
 
-    public ArticleFamilyController(ArticleFamilyRepository familyRepository) {
+    public ArticleFamilyController(ArticleFamilyRepository familyRepository,KafkaTemplate<String, StockCreatedEvent> kafkaTemplate) {
         this.familyRepository = familyRepository;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     // Get all families
@@ -34,6 +38,10 @@ public class ArticleFamilyController {
     // Create a family
     @PostMapping
     public ArticleFamily createFamily(@RequestBody ArticleFamily family) {
+        StockCreatedEvent event = new StockCreatedEvent();
+        event.setStockActivity(StockActivity.CREATED_ARTICLE_FAMILY_ACTIVITY);
+        event.setDescription("Stock family created");
+        kafkaTemplate.send("producer-stock-event", event);
         return familyRepository.save(family);
     }
 

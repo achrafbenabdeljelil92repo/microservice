@@ -1,6 +1,5 @@
-package org.achraf.ws.stockservice.security;
+package org.achraf.ws.apigateway.security;
 
-import org.achraf.ws.apigateway.security.KeycloakRoleConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
@@ -23,9 +22,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeExchange(exchanges -> exchanges
-                        .pathMatchers("/api/articles/**").hasRole("ADMIN")
-                        .pathMatchers("/api/families/**").hasRole("ADMIN")
-                        .pathMatchers("/api/stock-movements/**").hasRole("ADMIN")
+                        .pathMatchers("/auth-service/**").hasRole("ADMIN")
+                        .pathMatchers("/stock-service/**").hasRole("ADMIN")
                         .anyExchange().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2

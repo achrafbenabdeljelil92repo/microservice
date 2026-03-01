@@ -36,7 +36,7 @@ public class Article {
     private BigDecimal unitPrice;
 
     @ManyToOne
-    @JoinColumn(name = "family_id", nullable = false)
+    @JoinColumn(name = "family_id", nullable = true)
     private ArticleFamily family;
 
 

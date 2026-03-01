@@ -22,7 +22,7 @@ public class SecurityConfig {
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(keycloakRoleConverter);
 
-        http.csrf(csrf -> csrf.ignoringRequestMatchers(toH2Console()))
+        http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/articles/**").hasRole("ADMIN")
                         .requestMatchers("/api/families/**").hasRole("ADMIN")
