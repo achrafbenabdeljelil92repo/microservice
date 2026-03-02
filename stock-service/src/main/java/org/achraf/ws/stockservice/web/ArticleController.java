@@ -6,7 +6,9 @@ import org.achraf.ws.stockservice.entities.Article;
 import org.achraf.ws.stockservice.repository.ArticleRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -35,20 +37,22 @@ public class ArticleController {
 
     // Create new article
     @PostMapping
-    public Article createArticle(@RequestBody Article article) {
-        return articleRepository.save(article);
+    public ResponseEntity<Article> createArticle(@RequestBody Article article) {
+        Article saved = articleRepository.save(article);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(saved.getIdArticle()).toUri();
+
+        return ResponseEntity.created(location).body(saved);
     }
 
     // Update article
     @PutMapping("/{id}")
-    public ResponseEntity<Article> updateArticle(@PathVariable Long id, @RequestBody Article articleDetails) {
-        return articleRepository.findById(id).map(article -> {
-            article.setCodeArticle(articleDetails.getCodeArticle());
-            article.setLabel(articleDetails.getLabel());
-            article.setStockQuantity(articleDetails.getStockQuantity());
-            article.setMinimumThreshold(articleDetails.getMinimumThreshold());
-            article.setUnitPrice(articleDetails.getUnitPrice());
-            article.setFamily(articleDetails.getFamily());
+    public ResponseEntity<Article> updateArticle(@PathVariable Long id, @RequestBody Article article) {
+        return articleRepository.findById(id).map(art -> {
+            article.setCodeArticle(article.getCodeArticle());
+            article.setLabel(article.getLabel());
+            article.setStockQuantity(article.getStockQuantity());
+            article.setMinimumThreshold(article.getMinimumThreshold());
+            article.setUnitPrice(article.getUnitPrice());
             Article updated = articleRepository.save(article);
             return ResponseEntity.ok(updated);
         }).orElse(ResponseEntity.notFound().build());

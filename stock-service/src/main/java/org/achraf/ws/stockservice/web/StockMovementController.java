@@ -41,8 +41,9 @@ public class StockMovementController {
     }
 
     @GetMapping
-    public List<StockMovement> getAll() {
-        return repository.findAll();
+    public ResponseEntity<List<StockMovement>> getAll() {
+        return
+                ResponseEntity.ok(repository.findAll());
     }
 
     @GetMapping("/{id}")
