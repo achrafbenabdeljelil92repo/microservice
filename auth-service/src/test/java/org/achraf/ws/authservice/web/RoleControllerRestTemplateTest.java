@@ -16,6 +16,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
@@ -27,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 public class RoleControllerRestTemplateTest {
    @Autowired
-   TestRestTemplate restTemplate = new TestRestTemplate();
+   TestRestTemplate restTemplate;
     @Autowired
     private RoleRepository roleRepository;
 
@@ -40,27 +41,33 @@ public class RoleControllerRestTemplateTest {
         roleResponseEntity = restTemplate.postForEntity("/api/roles",role,Role.class);
     }
     @Test
+    @WithMockUser(username="admin", roles={"ADMIN"})
     void should_create_role_and_return_201() throws JSONException {
         Role role = new Role();
         role.setName("ADMIN");
-        ResponseEntity<Role> response = restTemplate.postForEntity("/api/roles",role,Role.class);
+        ResponseEntity<Role> response = restTemplate
+                .postForEntity("/api/roles",role,Role.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(response.getBody().getName()).isEqualTo(role.getName());
     }
 
     @Test
+    @WithMockUser(username="admin", roles={"ADMIN"})
     void findAll_should_return_200() {
         Role role = new Role();
         role.setName("ADMIN");
-        restTemplate.postForEntity("/api/roles", role, Role.class);
+        restTemplate
+                .postForEntity("/api/roles", role, Role.class);
         ResponseEntity<Role[]> response = restTemplate.getForEntity("/api/roles",Role[].class);
         assertThat(response.getBody()).hasSize(2);
         assertThat(response.getBody()[1].getName()).isEqualTo(role.getName());
     }
     @Test
+    @WithMockUser(username="admin", roles={"ADMIN"})
     void findAll_test_json() throws JsonProcessingException {
 
-        ResponseEntity<Role[]> response = restTemplate.getForEntity("/api/roles",Role[].class);
+        ResponseEntity<Role[]> response = restTemplate
+                .getForEntity("/api/roles",Role[].class);
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(response.getBody()); // Convertir en JSON String
         DocumentContext documentContext = JsonPath.parse(json);
@@ -73,8 +80,10 @@ public class RoleControllerRestTemplateTest {
 
          }
     @Test
+    @WithMockUser(username="admin", roles={"ADMIN"})
     void delete_role_should_return_204() {
-        ResponseEntity<Void> deleteResponse = restTemplate.exchange(
+        ResponseEntity<Void> deleteResponse = restTemplate
+                .exchange(
                 "/api/roles/{id}",
                 HttpMethod.DELETE,
                 null,
@@ -83,8 +92,10 @@ public class RoleControllerRestTemplateTest {
         assertThat(deleteResponse.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
     @Test
+    @WithMockUser(username="admin", roles={"ADMIN"})
     void findById_should_return_200() {
-        ResponseEntity<Role> response = restTemplate.getForEntity("/api/roles/{id}",
+        ResponseEntity<Role> response = restTemplate
+                .getForEntity("/api/roles/{id}",
                 Role.class, roleResponseEntity.getBody().getId());
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }

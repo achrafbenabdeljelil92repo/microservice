@@ -2,27 +2,22 @@ server:
   port: 0   # obligatoire pour TestRestTemplate
 
 spring:
-  application:
-    name: AUTH-SERVICE
-  profiles:
-    active: test
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+  h2:
+    console:
+      enabled=true:
   cloud:
     config:
       enabled: false
     discovery:
-      enabled: false   # ❗ jamais Eureka en test
-
- # datasource:
-  #  url: spring.datasource.url=jdbc:h2:mem:auth-db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-   # username: sa
-   # password:
-  #jpa:
-   # database-platform: org.hibernate.dialect.H2Dialect
-   # hibernate:
-   # ddl-auto: create
-   # show-sql: true
-
-h2:
-  console:
-    enabled: true
-    path: /h2-console
+      enabled: false
