@@ -16,7 +16,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
@@ -41,7 +40,6 @@ public class RoleControllerRestTemplateTest {
         roleResponseEntity = restTemplate.postForEntity("/api/roles",role,Role.class);
     }
     @Test
-    @WithMockUser(username="admin", roles={"ADMIN"})
     void should_create_role_and_return_201() throws JSONException {
         Role role = new Role();
         role.setName("ADMIN");
@@ -52,7 +50,6 @@ public class RoleControllerRestTemplateTest {
     }
 
     @Test
-    @WithMockUser(username="admin", roles={"ADMIN"})
     void findAll_should_return_200() {
         Role role = new Role();
         role.setName("ADMIN");
@@ -63,7 +60,6 @@ public class RoleControllerRestTemplateTest {
         assertThat(response.getBody()[1].getName()).isEqualTo(role.getName());
     }
     @Test
-    @WithMockUser(username="admin", roles={"ADMIN"})
     void findAll_test_json() throws JsonProcessingException {
 
         ResponseEntity<Role[]> response = restTemplate
@@ -80,7 +76,6 @@ public class RoleControllerRestTemplateTest {
 
          }
     @Test
-    @WithMockUser(username="admin", roles={"ADMIN"})
     void delete_role_should_return_204() {
         ResponseEntity<Void> deleteResponse = restTemplate
                 .exchange(
@@ -92,7 +87,6 @@ public class RoleControllerRestTemplateTest {
         assertThat(deleteResponse.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
     @Test
-    @WithMockUser(username="admin", roles={"ADMIN"})
     void findById_should_return_200() {
         ResponseEntity<Role> response = restTemplate
                 .getForEntity("/api/roles/{id}",
